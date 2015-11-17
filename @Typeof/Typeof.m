@@ -1,4 +1,17 @@
 classdef Typeof < handle
+%     Type checker
+%     Declaration : Typeofobj = Typeof()
+% 
+%     Methods :
+%     With Typeofobj
+%       isScalar
+%       isVector3
+%       isVectors3
+%       isVector4
+%       isVectorNx1
+%       isVectorNx3
+%       isSameSize
+%     End With
     properties (Access = private)
     end
     

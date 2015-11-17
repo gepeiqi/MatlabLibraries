@@ -1,6 +1,20 @@
-classdef Dictionary < handle
+classdef Dictionary < handle    
+%     Pairing 2 vectors key and value
+%     Declaration : Dictionaryobj = Dictionary(key,value)
+%     Input must be : Size of key,value = Nx1
+% 
+%     Methods :
+%     With Dictionary.
+%       Mode_OneToOne  : mode setting :if obj has No matching key/value , return NaN
+%       Mode_Complete  : mode setting :if obj has No matching key/value , return
+%       interped value/key
+%       toValue/Key(key/value) : key <-> value;input size =Mx1 , returns Mx1
+%       Key/Value(i)   : returns ith key/value , i=Mx1 , 
+%                        you can omit input "i" , then i=size of key
+%       HasUniqueKey/Value(value/key):  check availablity of key <-> value transrate 
+%     End With
 
-    
+
     %% Private properties
     properties (Access = public)
         Keymin;Keymax;Valuemin;Valuemax;
@@ -18,6 +32,7 @@ classdef Dictionary < handle
     methods (Access = public)
         %constractor
         function obj = Dictionary(key,value)
+            % obj = Dictionary(key,value)
             if(size(key,1)==size(value,1) && size(key,2)==1 && size(value,2)==1 )
                 obj.Data=[key value];
                 obj.N=size(key,1);
@@ -57,11 +72,19 @@ classdef Dictionary < handle
         function key = toKey(obj,value)
             key=obj.hash(ivalue,value);
         end
-        function key = Key(obj)
-            key=obj.Data(:,ikey);
+        function key = Key(obj,i)
+            if(nargin==1)
+                key=obj.Data(:,ikey);
+            elseif(nargin==2)
+                key=obj.Data(i,ikey);
+            end
         end
-        function value = Value(obj)
-            value=obj.Data(:,ivalue);
+        function value = Value(obj,i)
+            if(nargin==1)
+                value=obj.Data(:,ivalue);
+            elseif(nargin==2)
+                value=obj.Data(i,ivalue);
+            end
         end
         
         % check available of key <-> value transrate 
@@ -72,6 +95,11 @@ classdef Dictionary < handle
             TorF=obj.HasUnique(ivalue,value);
         end
         %%%
+        
+        %help
+        function h(~)
+            doc Dictionary
+        end
         
     end
     

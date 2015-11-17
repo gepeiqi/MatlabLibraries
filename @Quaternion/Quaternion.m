@@ -1,4 +1,21 @@
 classdef Quaternion < handle
+%     Quaternion calclator
+%     Declaration : Quaternionobj = Quaternion(q) %not recomendded
+%              or : Qfactory's method returns this class instance
+% 
+%     Methods :
+%     With Qfactory
+%       R() : returns 3x3 rotation matrix 
+%       toDouble() : Quaternion -> parameter [q1,q2,q3,q4]
+%       rpy() : return roll,pitch,yaw
+%       roll(): return roll
+%       pitch() : return pitch
+%       yaw() : return yaw
+%     End With
+%     
+%     OverRoads : (with q =Quaternion(Q))
+%       ~q    : returns conjection of q
+%       q1*q2 : calc Quaternion Production (q1*q2 means rotation q2 after q1)
     properties (Access = public)
     end
     properties (Access = private)
@@ -25,13 +42,7 @@ classdef Quaternion < handle
             obj.wx = atan2(2*y*z +2*w*x, -w*w +x*x +y*y -z*z);
             obj.x=x;obj.y=y;obj.z=z;obj.w=w;
         end
-        
-        %%% Quaternion Application
-        function x=Rotate(obj,r)
-            if(~obj.hasQuat) ; obj.ERROR(3) ;end
-            x=obj.Action(r,obj.q);
-        end
-        
+               
         %interface
         function Rmat = R(obj)
             Rmat=obj.Rmat;
@@ -68,6 +79,10 @@ classdef Quaternion < handle
             end
         end
         
+        %help
+        function h(~)
+            doc Quaternion
+        end
     end
     
     
