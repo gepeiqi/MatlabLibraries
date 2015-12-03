@@ -22,7 +22,6 @@ classdef Quaternion < handle
 %     Reference : http://users.aalto.fi/~ssarkka/pub/quat.pdf
 %               : http://www.x-io.co.uk/res/doc/madgwick_internal_report.pdf
     properties (Access = public)
-        angle;axis;param;
     end
     properties (Access = private)
         x,y,z,w,Rmat,theta,type;
@@ -35,8 +34,9 @@ classdef Quaternion < handle
         function obj = Quaternion(q)
             obj.type=Typeof();
             if(~obj.type.isVector4(q));obj.ERROR(2);end
+            q=q/sqrt(sum(q.^2));%normalize
             obj.theta=acos(q(4));
-%             if( abs(norm(q(1:3)) - sin(obj.theta))>0.0001);obj.ERROR(1);end
+            if( abs(norm(q(1:3)) - sin(obj.theta))>0.0001);obj.ERROR(1);end
             x=q(1);y=q(2);z=q(3);w=q(4);
             ii = @(a,b,c,d) a^2+b^2-c^2-d^2;
             ij = @(a,b,c,d) 2*(a*b+c*d);
@@ -47,7 +47,7 @@ classdef Quaternion < handle
             obj.wy =asin(2*w*y -2*x*z);
             obj.wx = atan2(2*y*z +2*w*x, -w*w +x*x +y*y -z*z);
             obj.x=x;obj.y=y;obj.z=z;obj.w=w;
-            obj.angle=2*obj.theta;obj.axis=q(1:3)./sin(obj.theta);obj.param=q;
+
         end
                
         %interface
@@ -69,22 +69,35 @@ classdef Quaternion < handle
         function deg=yaw(obj)
             deg=obj.wz;
         end
-        
+        function 
         
         function Qdot= dot(obj,rate)
             if(~obj.type.isVector3(rate));obj.ERROR(2);end
             rx=rate(1);ry=rate(2);rz=rate(3);
+%             Omega=[ 0  -rx -ry -rz;
+%                     rx  0  -rz  ry;
+%                     ry  rz  0  -rx;
+%                     rz -ry  rx  0];
             Omega=[ 0  -rz  ry  rx;
                     rz  0  -rx  ry;
                    -ry  rx  0   rz;
                    -rx -ry -rz  0];
             Q=obj.toDouble();
             Qdot=Quaternion(Omega*Q);
+%             Q=Q([4 1:3]);
+%             Qparam=Omega*Q;
+%             Qparam=Qparam([2:4 1]);
+%             Qdot=Quaternion(Qparam);
+            
+% s1=obj.w; s2=0;
+%             v1=[obj.x;obj.y;obj.z]; v2=rate;
+%             Qdot=Quaternion( ([(s1*v2+s2*v1+cross(v1,v2));(s1*s2 -dot(v1,v2))])/2);
+
         end
         
         %%% Quaternion Calc
         function q_bar = not(obj) %overload of [~]
-            q_bar=Quaternion([-obj.x;-obj.y;-obj.z;obj.w]);
+            q_bar=[-obj.x;-obj.y;-obj.z;obj.w];
         end
         
         function q=mtimes(a,b)%overload of [*]
