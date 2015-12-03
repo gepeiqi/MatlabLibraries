@@ -17,17 +17,17 @@ classdef Qfactory < handle
         function obj = Qfactory()
             obj.type=Typeof();
         end
-        % Quaternion Making
-        function q = Num2Quat(obj,qi)
-            if(~obj.type.isVector4(qi)); obj.ERROR() ; end
-            q=Quaternion(qi);
+        function q= Value2Quat(obj,values)
+            if(~obj.type.isVector4(values)); obj.ERROR(1) ; end
+            values=values/norm(values);
+            q=Quaternion(values);
         end
-        
+        % Quaternion Making
         function q = Param2Quat(obj,rotaxis,th)
             if(~obj.type.isVector3(rotaxis) || ~obj.type.isScalar(th)); obj.ERROR(1) ; end
             if(~(-2*pi < th && th < 2*pi)) ; obj.ERROR(2); end
             n=rotaxis/norm(rotaxis);
-            q=Quaternion([n*sin(th/2);cos(th/2)]);
+            q=Quaternion([cos(th/2);n*sin(th/2)]);
         end
         
         function q = Vectors2Quat(obj,a,b)
