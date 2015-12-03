@@ -5,7 +5,7 @@ classdef Qfactory < handle
 %     Methods :
 %     With Qfactory
 %       Num2Quat(qi) : qi= 4x1 quaternion parameter 
-%       Param2Quat(rotaxis,th) : rotaxis = 3x1 , th=1x1 radian of rotation  
+%       Param2Quat(rotaxis,th) : rotaxis = 3x1 , th=1x1 degree of rotation  
 %       Vectors2Quat(a,b) : a,b=3x1 , return quaternion a to b 
 %       Slerp(q1,q2,t) : q1,q2=quaternion , t=0~1 , Spere interp
 %     End With

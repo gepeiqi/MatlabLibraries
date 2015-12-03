@@ -75,18 +75,18 @@ classdef Quaternion < handle
             obj.normalized=obj.isNormalized;
         end
         function TF=isNormalized(obj)
-            TF=norm(obj.q)==1;
+            TF=norm(obj.q)-1<0.0001;
         end
         
         function Qdot= dot(obj,rate)
             if(~obj.type.isVector3(rate));obj.ERROR(2);end
-            rx=rate(1);ry=rate(2);rz=rate(3);
-            Omega=[ 0  -rx -ry  -rz;
-                    rx  0  -rz   ry;
-                    ry  rz  0   -rx;
-                    rz -ry  rx   0];
-            Qdot=Omega*obj.q;
-%             Qdot = ( 0.5 * obj.qprod(obj.q,[0;rate]));
+%             rx=rate(1);ry=rate(2);rz=rate(3);
+%             Omega=[ 0  -rx -ry  -rz;
+%                     rx  0  -rz   ry;
+%                     ry  rz  0   -rx;
+%                     rz -ry  rx   0];
+%             Qdot=Quaternion(Omega*obj.q);
+            Qdot =Quaternion( 0.5 * obj.qprod(obj.q,[0;rate]));
         end
         
         %%% Quaternion Calc interface
@@ -100,7 +100,7 @@ classdef Quaternion < handle
                 q2=b.toDouble;
                 s1=q1(1); s2=q2(1);
                 v1=q1(2:4); v2=q2(2:4);
-                q=Quaternion([(s1*v2+s2*v1+cross(v1,v2));(s1*s2 -dot(v1,v2))]);
+                q=Quaternion([(s1*s2 -dot(v1,v2));(s1*v2+s2*v1+cross(v1,v2))]);
                 q.normalize();
             elseif(isa(a,'Quaternion') && isreal(b))
                 q1=a.toDouble;
@@ -115,7 +115,7 @@ classdef Quaternion < handle
         
         function q=plus(a,b)
             if(isa(a,'Quaternion') && isa(b,'Quaternion'))
-                q=Quaternion(a.toDouble+b.toDouble);%quaternion production
+                q=Quaternion(a.toDouble+b.toDouble);%quaternion sumention
             else
                 error('Unsupported Calclation');
             end
@@ -146,28 +146,8 @@ classdef Quaternion < handle
         function q=qprod(~,q1,q2)
             s1=q1(1); s2=q2(1);
             v1=q1(2:4); v2=q2(2:4);
-            q=[(s1*v2+s2*v1+cross(v1,v2));(s1*s2 -dot(v1,v2))];%quaternion production
+            q=[(s1*s2 -dot(v1,v2));(s1*v2+s2*v1+cross(v1,v2))];%quaternion production
         end
     end
     
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
