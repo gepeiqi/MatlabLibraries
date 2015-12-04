@@ -9,7 +9,7 @@ base=[0;1;0];
 quiv =@(A,s) quiver3(0,0,0,A(1),A(2),A(3),0,s);
 
 %% rotation around ax
-ax=[0;1;1];
+ax=[1;1;1];
 figure(1)
 quiv(base,'b')
 hold on
