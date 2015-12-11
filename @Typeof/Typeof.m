@@ -43,6 +43,9 @@ classdef Typeof < handle
         function TF=isVectorNx3(~,X)
             TF=size(X,2)==3;
         end
+        function TF=isVector3xN(~,X)
+            TF=size(X,1)==3;
+        end
         
         
         function TF=isSameSize(obj,varargin)

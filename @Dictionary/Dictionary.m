@@ -7,7 +7,7 @@ classdef Dictionary < handle
 %     With Dictionary.
 %       Mode_OneToOne  : mode setting :if obj has No matching key/value , return NaN
 %       Mode_Complete  : mode setting :if obj has No matching key/value , return
-%       interped value/key
+%                        interped value/key
 %       toValue/Key(key/value) : key <-> value;input size =Mx1 , returns Mx1
 %       Key/Value(i)   : returns ith key/value , i=Mx1 , 
 %                        you can omit input "i" , then i=size of key
@@ -63,6 +63,10 @@ classdef Dictionary < handle
 %         end
         function Mode_Complete(obj)
             obj.MODE=Complete;
+        end
+        
+        function Mode_Extrap(obj)
+            obj.MODE=Extrap;
         end
         
         % key <-> value
@@ -129,6 +133,8 @@ classdef Dictionary < handle
                         if(obj.Griddable(col))
                             rtn(i)=obj.F{col}(target(i));
                         end
+                    case Extrap
+                        rtn(i)=extrap1(obj.Data(:,col),obj.Data(:,opp(col)),target(i));
                 end
             end
         end
@@ -168,6 +174,9 @@ function mode = Complete()
     mode=3;
 end
 
+function mode = Extrap()
+    mode=4;
+end
 %%local func
 function SA=matsort(A,col)
     [~,idx]=sort(A(:,col));

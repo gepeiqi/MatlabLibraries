@@ -2,7 +2,7 @@ classdef Quaternion < handle
     %     Quaternion calclator
     %     Declaration : Quaternionobj = Quaternion(q)
     %              or : Qfactory's method returns this class instance
-    %     Input must be 4x1 vector, q(1:3)=axis element, q(4)=angle element
+    %     Input must be 4x1 vector, q(2:4)=axis element, q(1)=angle element
     %
     %
     %     Methods :

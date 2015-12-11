@@ -34,17 +34,23 @@ classdef Qfactory < handle
             if(~obj.type.isVector3(a) || ~obj.type.isVector3(b)); obj.ERROR(1) ; end
             n=cross(a,b);
             th=acos(dot(a,b)/(norm(a)*norm(b)));
+            if(sum(n==0)==3); n=[0;0;1];obj.ERROR(3);end            
             q=obj.Param2Quat(n,th);
         end
         
         function q=Slerp(obj,q1,q2,t)
             if( ~isa(q1,'Quaternion') || ~isa(q2,'Quaternion') ); obj.ERROR(1);end
             if( ~obj.type.isScalar(t));obj.ERROR(1);end
-            if( ~(0<=t && t<=1) );obj.ERROR(1);end
+%             if( ~(0<=t && t<=1) );obj.ERROR(1);end
+            if( ~(0<=t) );obj.ERROR(1);end
             Om=acos(q1.toDouble'*q2.toDouble);
             Ps=sin((1-t)*Om)/sin(Om);
             Pe=sin(t*Om)/sin(Om);
             q=Quaternion(Ps*q1.toDouble + Pe*q2.toDouble);
+        end
+        
+        function q=Empty(obj)
+            q=obj.Param2Quat([0;0;1],0);
         end
         %help
         function h(~)
@@ -59,6 +65,8 @@ classdef Qfactory < handle
                     error('invalid input \n');
                 case 2
                     warning('rotate angle th must be "Rad". your input might be "Deg" (out of -2pi to 2pi)' );
+                case 3
+                    warning('Rotate angle = 0')
                 otherwise
             end
         end

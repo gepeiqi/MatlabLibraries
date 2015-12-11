@@ -42,7 +42,11 @@ classdef MultiDictionary < handle
                 obj.dictionaries{i}.Mode_Complete;
             end
         end
-        
+        function Mode_Extrap(obj)
+            for i=1:obj.s
+                obj.dictionaries{i}.Mode_Extrap;
+            end
+        end
         %value return
         function values = toValue(obj,key)
             values = NaN(size(key));
